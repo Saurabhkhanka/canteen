@@ -104,7 +104,7 @@ graph TD
 2.  Connect your GitHub repository, selecting the root directory as `backend`.
 3.  Set settings:
     *   **Runtime**: `Node`
-    *   **Build Command**: `npm install && npm run build`
+    *   **Build Command**: `npm install --include=dev && npm run build`
     *   **Start Command**: `npm start`
 4.  Add environment variables in the Render settings panel:
     *   `MONGODB_URI` - MongoDB Atlas connection string.
