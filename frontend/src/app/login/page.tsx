@@ -20,6 +20,7 @@ export default function LoginPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const [triggerLogin, { isLoading: isLoginLoading }] = useLoginMutation();
   const [triggerRegister, { isLoading: isRegisterLoading }] = useRegisterMutation();
@@ -52,6 +53,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setSuccessMessage(null);
 
     // Common validations
     if (!email.trim() || !password) {
@@ -87,12 +89,17 @@ export default function LoginPage() {
       }
 
       try {
-        const result = await triggerRegister({
+        await triggerRegister({
           name: name.trim(),
           email: email.trim(),
           password,
         }).unwrap();
-        dispatch(setCredentials(result.user));
+        
+        setSuccessMessage('Registration successful! Please sign in with your credentials.');
+        setIsLoginView(true);
+        setName('');
+        setPassword('');
+        setConfirmPassword('');
       } catch (err: any) {
         console.error('Registration error:', err);
         setErrorMessage(err.data?.message || 'Failed to register. Please check your credentials.');
@@ -103,6 +110,7 @@ export default function LoginPage() {
   const toggleView = () => {
     setIsLoginView(!isLoginView);
     setErrorMessage(null);
+    setSuccessMessage(null);
     setPassword('');
     setConfirmPassword('');
   };
@@ -147,6 +155,13 @@ export default function LoginPage() {
         {errorMessage && (
           <div className="mb-6 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl text-center">
             {errorMessage}
+          </div>
+        )}
+
+        {/* Success Notification banner */}
+        {successMessage && (
+          <div className="mb-6 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold rounded-xl text-center">
+            {successMessage}
           </div>
         )}
 

@@ -55,8 +55,8 @@ async function handleProxy(req: NextRequest, { params }: { params: Promise<{ pat
 
     const data = await backendResponse.json();
 
-    // 5. Intercept Login/Register responses to set token in cookie
-    if ((isLogin || isRegister) && backendResponse.ok && data.token) {
+    // 5. Intercept Login responses to set token in cookie
+    if (isLogin && backendResponse.ok && data.token) {
       const response = NextResponse.json({
         success: true,
         message: data.message,
