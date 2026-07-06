@@ -86,6 +86,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Convert repository to lowercase
+        run: |
+          echo "REPO_LOWER=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -107,8 +111,8 @@ jobs:
           file: ./backend/dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/canteen-backend:latest
-            ghcr.io/${{ github.repository }}/canteen-backend:${{ github.sha }}
+            ghcr.io/${{ env.REPO_LOWER }}/canteen-backend:latest
+            ghcr.io/${{ env.REPO_LOWER }}/canteen-backend:${{ github.sha }}
 
       # Build and push Frontend Image
       - name: Build and Push Frontend Image
@@ -118,5 +122,5 @@ jobs:
           file: ./frontend/dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/canteen-frontend:latest
-            ghcr.io/${{ github.repository }}/canteen-frontend:${{ github.sha }}
+            ghcr.io/${{ env.REPO_LOWER }}/canteen-frontend:latest
+            ghcr.io/${{ env.REPO_LOWER }}/canteen-frontend:${{ github.sha }}
