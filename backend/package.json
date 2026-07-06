@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "test": "npx ts-node src/tests/auth.test.ts && npx ts-node src/tests/email.test.ts && npx ts-node src/tests/menu-order.test.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

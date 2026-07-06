@@ -1,0 +1,31 @@
+# Stage 1: Build stage
+FROM node:20-alpine AS builder
+WORKDIR /usr/src/app
+
+# Copy package files and install all dependencies (including devDependencies for typescript compilation)
+COPY package*.json ./
+RUN npm ci
+
+# Copy source code and build/compile typescript to dist
+COPY . .
+RUN npm run build
+
+# Stage 2: Production runtime stage
+FROM node:20-alpine AS runner
+WORKDIR /usr/src/app
+
+ENV NODE_ENV=production
+
+# Install only production dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy compiled files from builder
+COPY --from=builder /usr/src/app/dist ./dist
+
+# Run as a non-root user for security
+USER node
+
+EXPOSE 5000
+
+CMD ["node", "dist/server.js"]
