@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Campus Canteen Automation System",
+  title: "Campus Canteen",
   description: "Industry-grade digital food ordering system for school and college canteens.",
 };
 
