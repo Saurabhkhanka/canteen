@@ -53,7 +53,20 @@ async function handleProxy(req: NextRequest, { params }: { params: Promise<{ pat
       body,
     });
 
-    const data = await backendResponse.json();
+    const text = await backendResponse.text();
+    let data: any;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error(`BFF Proxy Error - Non-JSON response from backend [URL: ${targetUrl}, Status: ${backendResponse.status}]:`, text.substring(0, 500));
+      return NextResponse.json(
+        { 
+          success: false, 
+          message: `Backend error: Received invalid response from server. Status ${backendResponse.status}` 
+        },
+        { status: backendResponse.status || 502 }
+      );
+    }
 
     // 5. Intercept Login responses to set token in cookie
     if (isLogin && backendResponse.ok && data.token) {
